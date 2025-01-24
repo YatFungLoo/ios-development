@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  MeetingView.swift
 //  Scrumdinger
 //
 //  Created by YatFungLoo on 23/1/2025.
@@ -10,7 +10,7 @@ import SwiftUI
 struct MeetingView: View {
     var body: some View {
         VStack {
-            ProgressView(value:3, total:9)
+            ProgressView(value: 3, total: 9)
             HStack {
                 VStack(alignment: .leading) {
                     Text("Second Elasped").font(.caption)
