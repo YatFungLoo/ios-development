@@ -11,10 +11,21 @@ struct ScrumView: View {
     let scrums: [DailyScrum]
     
     var body: some View {
-//        List(scrums, id: \.title) { scrum in // Use if name are unique
-        List(scrums) { scrum in // use if name are not unique
-            CardView(scrum: scrum)
+        NavigationStack {
+            // List(scrums, id: \.title) { scrum in // Use if name are unique
+            List(scrums) { scrum in // use if name are not unique
+                NavigationLink(destination: Text(scrum.title)) {
+                    CardView(scrum: scrum)
+                }
                 .listRowBackground(scrum.theme.mainColor)
+            }
+            .navigationTitle("Daily Scrums")
+            .toolbar {
+                Button(action: {}) {
+                    Image(systemName: "plus")
+                }
+                .accessibilityLabel("New Scurm")
+            }
         }
     }
 }
