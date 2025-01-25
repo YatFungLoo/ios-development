@@ -14,7 +14,7 @@ struct ScrumView: View {
         NavigationStack {
             // List(scrums, id: \.title) { scrum in // Use if name are unique
             List(scrums) { scrum in // use if name are not unique
-                NavigationLink(destination: Text(scrum.title)) {
+                NavigationLink(destination: DetailView(scrum: scrum)) {
                     CardView(scrum: scrum)
                 }
                 .listRowBackground(scrum.theme.mainColor)
