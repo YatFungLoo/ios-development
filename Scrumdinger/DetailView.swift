@@ -19,9 +19,19 @@ struct DetailView: View {
                 HStack {
                     Label("Length", systemImage: "clock")
                     Spacer()
-                    Text("\(scrum.lengthInMinutes) minutes")
+                    Text("\(scrum.lengthInMinutes)")
                 }
-                .accessibilityLabel(children: .combine)
+                .accessibilityElement(children: .combine)
+                HStack {
+                    Label("Theme", systemImage: "paintpalette")
+                    Spacer()
+                    Text("\(scrum.theme.name)")
+                        .padding(4)
+                        .foregroundColor(scrum.theme.accentColor)
+                        .background(scrum.theme.mainColor)
+                        .cornerRadius(4)
+                }
+                .accessibilityElement(children: .combine)
             }
         }
     }
