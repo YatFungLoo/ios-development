@@ -14,21 +14,7 @@ struct MeetingView: View {
             RoundedRectangle(cornerRadius: 16.0)
                 .fill(scrum.theme.mainColor)
             VStack {
-                ProgressView(value: 3, total: 9)
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Second Elasped").font(.caption)
-                        Label("300", systemImage: "hourglass.tophalf.fill")
-                    }
-                    Spacer()
-                    VStack(alignment: .trailing) {
-                        Text("Second Remaining").font(.caption)
-                        Label("600", systemImage: "hourglass.bottomhalf.fill")
-                    }
-                }
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel("Time remaining")
-                .accessibilityValue("10 mintues")
+                MeetingHeaderView(secondsElasped: 3, minutesElasped: 9, theme: scrum.theme)
                 Circle().strokeBorder(lineWidth: 40)
                 HStack {
                     Text("Speaker 1 of 3")
@@ -38,9 +24,10 @@ struct MeetingView: View {
                     }
                     .accessibilityLabel("Next speaker")
                 }
+                .padding(15)
             }
         }
-        .padding(20)
+        .padding(15)
         .foregroundColor(scrum.theme.accentColor)
 //        .navigationBarTitleDisplayMode(.inline)
     }
