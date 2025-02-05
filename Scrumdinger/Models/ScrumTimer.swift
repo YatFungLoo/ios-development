@@ -52,7 +52,7 @@ final class ScrumTimer: ObservableObject {
         activeSpeaker = speakerText
     }
 
-    func startScum() {
+    func startScrum() {
         timer = Timer.scheduledTimer(withTimeInterval: frequency, repeats: true)
         {
             [weak self] timer in
@@ -62,7 +62,7 @@ final class ScrumTimer: ObservableObject {
         changeToSpeaker(at: 0)
     }
 
-    func stopScrume() {
+    func stopScrum() {
         timer?.invalidate()
         timerStopped = true
     }
