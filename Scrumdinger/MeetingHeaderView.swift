@@ -9,18 +9,18 @@ import SwiftUI
 
 struct MeetingHeaderView: View {
     let secondsElasped: Int
-    let minutesElasped: Int
+    let secondsRemaining: Int
     let theme: Theme
 
     private var totalSeconds: Int {
-        secondsElasped + minutesElasped  // single expression doesn't require return statement.
+        secondsElasped + secondsRemaining // single expression doesn't require return statement.
     }
     private var progress: Double {
-        guard totalSeconds < 0 else { return 1 }  // Base case check.
+        guard totalSeconds > 0 else { return 1 }  // Base case check.
         return Double(secondsElasped) / Double(totalSeconds)
     }
     private var minutesRemaining: Int {
-        secondsElasped / 60
+        secondsRemaining / 60
     }
 
     var body: some View {
@@ -29,16 +29,16 @@ struct MeetingHeaderView: View {
                 .progressViewStyle(ScrumProgressViewStyle(theme: theme))
             HStack {
                 VStack(alignment: .leading) {
-                    Text("Second Elasped").font(.caption)
+                    Text("Seconds Elasped").font(.caption)
                     Label(
                         "\(secondsElasped)",
                         systemImage: "hourglass.tophalf.fill")
                 }
                 Spacer()
                 VStack(alignment: .trailing) {
-                    Text("Second Remaining").font(.caption)
+                    Text("Seconds Remaining").font(.caption)
                     Label(
-                        "\(minutesElasped)",
+                        "\(secondsRemaining)",
                         systemImage: "hourglass.bottomhalf.fill")
                 }
                 .labelStyle(.trailingIcon)
@@ -53,7 +53,7 @@ struct MeetingHeaderView: View {
 
 struct MeetingHeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        MeetingHeaderView(secondsElasped: 3, minutesElasped: 9, theme: .orange)
+        MeetingHeaderView(secondsElasped: 3, secondsRemaining: 9, theme: .orange)
             .previewLayout(.sizeThatFits)
     }
 }
