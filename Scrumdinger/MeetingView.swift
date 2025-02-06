@@ -16,8 +16,8 @@ struct MeetingView: View {
                 .fill(scrum.theme.mainColor)
             VStack {
                 MeetingHeaderView(
-                    secondsElasped: scrumTimer.secondElasped,
-                    minutesElasped: scrumTimer.secondsRemaining,
+                    secondsElasped: scrumTimer.secondsElasped,
+                    secondsRemaining: scrumTimer.secondsRemaining,
                     theme: scrum.theme)
                 Circle().strokeBorder(lineWidth: 30)
                 HStack {

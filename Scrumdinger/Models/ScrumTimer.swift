@@ -18,13 +18,13 @@ final class ScrumTimer: ObservableObject {
 
     // @Published var changes within an @ObservableObject will trigger update to SwiftUI object observers.
     @Published var activeSpeaker = ""
-    @Published var secondElasped = 0
+    @Published var secondsElasped = 0
     @Published var secondsRemaining = 0
 
     private(set) var speakers: [Speaker] = []
     private(set) var lengthInMinutes: Int
 
-    var speakerCnagedAction: (() -> Void)?
+    var speakerChangedAction: (() -> Void)?
     private weak var timer: Timer?
 
     private var timerStopped = false
@@ -83,8 +83,8 @@ final class ScrumTimer: ObservableObject {
         speakerIndex = index
         activeSpeaker = speakerText
 
-        secondElasped = index * secondsPerSpeaker
-        secondsRemaining = lengthInSeconds - secondElasped
+        secondsElasped = index * secondsPerSpeaker
+        secondsRemaining = lengthInSeconds - secondsElasped
         startDate = Date()
     }
 
@@ -94,16 +94,16 @@ final class ScrumTimer: ObservableObject {
             let secondsElapsed = Int(
                 Date().timeIntervalSince1970 - startDate.timeIntervalSince1970)
             secondsElapsedForSpeaker = secondsElapsed
-            self.secondElasped =
+            self.secondsElasped =
                 secondsPerSpeaker * speakerIndex + secondsElapsedForSpeaker
             guard secondsElapsed <= secondsPerSpeaker else {
                 return
             }
-            secondsRemaining = max(lengthInSeconds - self.secondsRemaining, 0)
+            secondsRemaining = max(lengthInSeconds - self.secondsElasped, 0)
 
             if secondsElapsedForSpeaker >= secondsPerSpeaker {
                 changeToSpeaker(at: speakerIndex + 1)
-                speakerCnagedAction?()
+                speakerChangedAction?()
             }
         }
     }
