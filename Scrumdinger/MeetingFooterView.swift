@@ -44,7 +44,7 @@ struct MeetingFooterView: View {
                 }
             }
         }
-        .padding([.bottom,. horizontal])
+        .padding([.bottom, .horizontal])
     }
 }
 

@@ -10,18 +10,18 @@ import SwiftUI
 struct DetailEditView: View {
     @Binding var scrum: DailyScrum
     @State private var newAttendeeName = ""
-    
+
     var body: some View {
         Form {
             Section(header: Text("Form")) {
                 TextField("Title", text: $scrum.title)
                 HStack {
-                    Slider (
+                    Slider(
                         value: $scrum.lengthInMinutesAsDouble,
                         in: 5...30,
                         step: 0.01
                     ) {
-                        Text("Length") // For voiceover
+                        Text("Length")  // For voiceover
                     }
                     .accessibilityValue("\(scrum.lengthInMinutes) minutes")
                     Spacer()
@@ -39,11 +39,12 @@ struct DetailEditView: View {
                 }
                 HStack {
                     TextField("New Attendee", text: $newAttendeeName)
-                    Button(action: { // what happends when you click the button
+                    Button(action: {  // what happends when you click the button
                         withAnimation {
-                            let attendee = DailyScrum.Attendee(name: newAttendeeName)
+                            let attendee = DailyScrum.Attendee(
+                                name: newAttendeeName)
                             scrum.attendees.append(attendee)
-                            newAttendeeName = "" // clears the input area
+                            newAttendeeName = ""  // clears the input area
                         }
                     }) {
                         Image(systemName: "plus.circle.fill")

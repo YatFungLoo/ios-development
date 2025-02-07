@@ -5,15 +5,15 @@
 //  Created by YatFungLoo on 23/1/2025.
 //
 
-import SwiftUI
 import AVFoundation
+import SwiftUI
 
 struct MeetingView: View {
     @Binding var scrum: DailyScrum
     @StateObject var scrumTimer = ScrumTimer()
-    
+
     private var player: AVPlayer { AVPlayer.sharedDingPlayer }
-    
+
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16.0)
@@ -24,13 +24,17 @@ struct MeetingView: View {
                     secondsRemaining: scrumTimer.secondsRemaining,
                     theme: scrum.theme)
                 Circle().strokeBorder(lineWidth: 30)
-                MeetingFooterView(speakers: scrumTimer.speakers, skipAction: scrumTimer.skipSpeaker)
+                MeetingFooterView(
+                    speakers: scrumTimer.speakers,
+                    skipAction: scrumTimer.skipSpeaker)
             }
         }
         .padding(15)
         .foregroundColor(scrum.theme.accentColor)
         .onAppear {
-            scrumTimer.reset(lengthInMinutes: scrum.lengthInMinutes, attendees: scrum.attendees)
+            scrumTimer.reset(
+                lengthInMinutes: scrum.lengthInMinutes,
+                attendees: scrum.attendees)
             scrumTimer.speakerChangedAction = {
                 player.seek(to: .zero)
                 player.play()

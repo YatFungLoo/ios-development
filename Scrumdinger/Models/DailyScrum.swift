@@ -21,11 +21,14 @@ struct DailyScrum: Identifiable {
         }
     }
     var theme: Theme
-    
-    init(id: UUID = UUID(), title: String, attendees: [String], lengthInMinutes: Int, theme: Theme) {
+
+    init(
+        id: UUID = UUID(), title: String, attendees: [String],
+        lengthInMinutes: Int, theme: Theme
+    ) {
         self.id = id
         self.title = title
-        self.attendees = attendees.map { Attendee(name: $0) } // first argument in closure
+        self.attendees = attendees.map { Attendee(name: $0) }  // first argument in closure
         self.lengthInMinutes = lengthInMinutes
         self.theme = theme
     }
@@ -35,13 +38,13 @@ extension DailyScrum {
     struct Attendee: Identifiable {
         let id: UUID
         let name: String
-        
+
         init(id: UUID = UUID(), name: String) {
             self.id = id
             self.name = name
         }
     }
-    
+
     static var emptyScrum: DailyScrum {
         DailyScrum(
             title: "",
@@ -51,28 +54,26 @@ extension DailyScrum {
     }
 }
 
-
 extension DailyScrum {
     static var sampleData: [DailyScrum] =
-    [
-        DailyScrum(
-            title: "Design",
-            attendees: ["Dexter", "Baxter", "Lexter"],
-            lengthInMinutes: 10,
-            theme: .orange),
-        
-        DailyScrum(
-            title: "Develop",
-            attendees: ["John", "Lewis", "Mary"],
-            lengthInMinutes: 35,
-            theme: .teal),
-        
-        DailyScrum(
-            title: "Test",
-            attendees: ["Bond", "Morgen", "Mary"],
-            lengthInMinutes: 20,
-            theme: .bubblegum),
-    ]
-    
-}
+        [
+            DailyScrum(
+                title: "Design",
+                attendees: ["Dexter", "Baxter", "Lexter"],
+                lengthInMinutes: 10,
+                theme: .orange),
 
+            DailyScrum(
+                title: "Develop",
+                attendees: ["John", "Lewis", "Mary"],
+                lengthInMinutes: 35,
+                theme: .teal),
+
+            DailyScrum(
+                title: "Test",
+                attendees: ["Bond", "Morgen", "Mary"],
+                lengthInMinutes: 20,
+                theme: .bubblegum),
+        ]
+
+}
