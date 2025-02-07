@@ -9,19 +9,19 @@ import SwiftUI
 
 struct DetailView: View {
     @Binding var scrum: DailyScrum
-    
+
     // Scource of truth for DetailEditView.
     @State private var editingScrum = DailyScrum.emptyScrum
     @State private var isPresentingEditView = false
-    
+
     var body: some View {
         List {
             Section(header: Text("Meeting Info")) {
-                NavigationLink(destination: MeetingView(scrum: $scrum)) { // Now meeting view have scrum in scope.
-                Label("Start Meeting", systemImage: "timer")
-                    .font(.headline)
-                    .foregroundColor(.accentColor)
-            }
+                NavigationLink(destination: MeetingView(scrum: $scrum)) {  // Now meeting view have scrum in scope.
+                    Label("Start Meeting", systemImage: "timer")
+                        .font(.headline)
+                        .foregroundColor(.accentColor)
+                }
                 HStack {
                     Label("Length", systemImage: "clock")
                     Spacer()
@@ -48,30 +48,14 @@ struct DetailView: View {
         .navigationTitle(scrum.title)
         .toolbar {
             Button("Edit") {
-                isPresentingEditView = true // setting to true will trigger DetailEditView
+                isPresentingEditView = true  // setting to true will trigger DetailEditView
                 editingScrum = scrum
             }
         }
         .sheet(isPresented: $isPresentingEditView) {
-            NavigationStack {
-                DetailEditView(scrum: $editingScrum)
-                    .navigationTitle(scrum.title)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel") {
-                                isPresentingEditView = false
-                            }
-                        }
-                    }
-                    .toolbar {
-                        ToolbarItem(placement: .confirmationAction) {
-                            Button("Done") {
-                                isPresentingEditView = false
-                                scrum = editingScrum
-                            }
-                        }
-                    }
-            }
+            EditDetailSheet(
+                scrum: $scrum, editingScrum: $editingScrum,
+                isPresentingEditView: $isPresentingEditView)
         }
     }
 }
