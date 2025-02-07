@@ -10,13 +10,13 @@ import SwiftUI
 struct ScrumsView: View {
     @Binding var scrums: [DailyScrum]
     @State private var isPresentingNewScrumView = false
-    
+
     var body: some View {
         NavigationStack {
             // List(scrums, id: \.title) { scrum in // Use if name are unique
-            List($scrums) { $scrum in // use if name are not unique
-                    NavigationLink(destination: DetailView(scrum: $scrum)) { // Array binding syntax
-                        CardView(scrum: scrum)
+            List($scrums) { $scrum in  // use if name are not unique
+                NavigationLink(destination: DetailView(scrum: $scrum)) {  // Array binding syntax
+                    CardView(scrum: scrum)
                 }
                 .listRowBackground(scrum.theme.mainColor)
             }
@@ -31,7 +31,9 @@ struct ScrumsView: View {
             }
         }
         .sheet(isPresented: $isPresentingNewScrumView) {
-            NewScrumSheet(scrums: $scrums, isPresentingNewScrumView: $isPresentingNewScrumView)
+            NewScrumSheet(
+                scrums: $scrums,
+                isPresentingNewScrumView: $isPresentingNewScrumView)
         }
     }
 }

@@ -13,7 +13,7 @@ struct MeetingHeaderView: View {
     let theme: Theme
 
     private var totalSeconds: Int {
-        secondsElasped + secondsRemaining // single expression doesn't require return statement.
+        secondsElasped + secondsRemaining  // single expression doesn't require return statement.
     }
     private var progress: Double {
         guard totalSeconds > 0 else { return 1 }  // Base case check.
@@ -53,7 +53,9 @@ struct MeetingHeaderView: View {
 
 struct MeetingHeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        MeetingHeaderView(secondsElasped: 3, secondsRemaining: 9, theme: .orange)
-            .previewLayout(.sizeThatFits)
+        MeetingHeaderView(
+            secondsElasped: 3, secondsRemaining: 9, theme: .orange
+        )
+        .previewLayout(.sizeThatFits)
     }
 }

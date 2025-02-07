@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ThemeView: View {
     let theme: Theme
-    
+
     var body: some View {
         Text(theme.name)
             .frame(maxWidth: .infinity)
