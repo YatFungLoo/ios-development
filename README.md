@@ -2,15 +2,24 @@
 
 Just following the tutorial to gain some experience working with Swift and SwiftUI.
 
+[AWS get started for when application is finished](https://aws.amazon.com/tw/mobile/mobile-application-development/native/ios/)
+
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table of Contents**
 
 - [Scrumdinger App (Learning Swift)](#scrumdinger-app-learning-swift)
-  - [Clousure](#clousure)
+  - [Closure](#closure)
+    - [Completion Closure using `escaping` and `nonescaping`](#completion-closure-using-escaping-and-nonescaping)
   - [`some` keyword](#some-keyword)
+  - [`throw` keyword](#throw-keyword)
   - [Private(set)](#privateset)
   - [Strong `?` and `weak` reference](#strong--and-weak-reference)
+  - [Asynchronous](#asynchronous)
+    - [Asynchronous vs Parallelism](#asynchronous-vs-parallelism)
+    - [Defining `async` function and calling `await`](#defining-async-function-and-calling-await)
+    - [Task](#task)
   - [Actor Pattern (reference type)](#actor-pattern-reference-type)
+    - [`@MainActor` annotation](#mainactor-annotation)
     - [`isolated` and `nonisolated` function](#isolated-and-nonisolated-function)
   - [ProgressView](#progressview)
   - [Text and Label](#text-and-label)
@@ -30,7 +39,9 @@ Just following the tutorial to gain some experience working with Swift and Swift
 
 <!-- markdown-toc end -->
 
-## Clousure
+## Closure
+
+Closure is a block of code that you can assign to a variable. It can be pass around, say to another function.
 
 function without `func` key word to create.
 
@@ -41,6 +52,8 @@ function without `func` key word to create.
 ```
 
 It can have neither, one of, or both parameters and return type.
+
+> Closure parameters does not require name, only type.
 
 It can also create a function that accepts closure as its parameter.
 
@@ -78,9 +91,23 @@ grabLunch(message:"Let's go out for lunch")  {
 
 There is also `@autoclosure` that can be use at parameter to automatically adds curly braces.
 
+### Completion Closure using `escaping` and `nonescaping`
+
+Completion handlers allows closure to escape and return to the function, essentially how async is done without syntactic sugar on top.
+
+The main difference between completion handlers and async await is that completion handlers use callbacks to handle the results of asynchronous operation that can lead to deeply nested code which also leads to hard error marking.
+
+Meanwhile, asynchronous functions are written sequentially.
+
 ## `some` keyword
 
 swift provides a function called `protocol` for generics and type erasure, which is used to indicate that a function or property will return a value of a specific type that conforms to a protocol, but the exact type is not specified.
+
+## `throw` keyword
+
+Throwing function mark with the keyword `throw` are for error handling. If a function 'throws' fails the error will be thrown at you and swift requires you to fix the error.
+
+> Throwing function and functions that return optional inherently different!
 
 ## Private(set)
 
@@ -110,11 +137,54 @@ sabby?.colleague = cathy // Use ?
 
 > By default property are strong type.
 
+## Asynchronous
+
+[Link to reference article](https://developer.apple.com/tutorials/app-dev-training/adopting-swift-concurrency)
+
+[Link to official documentation](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency/)
+
+[Link to interview questions and answers](https://growwithanyone.medium.com/async-await-in-ios-advanced-questions-and-answers-for-interviews-5fb3243c311b)
+
+> Main thread executes all UI work, delivers all user events (e.g. taps, swipes)
+
+If main threads does too much work, app performance will decrease. Main thread stalling (i.e. waiting for fetch data) can also delay view updates and event handling.
+
+Need to find balance between executing on main thread when necessary, and execute on a background thread when possible.
+
+### Asynchronous vs Parallelism
+
+Asynchronous code can be *suspended and resumed* later. While async code suspend (i.e. `await`) it can do other short-term work (e.g. updating UI), and resume back to long-term work (e.g. fetching internet with slow connection).
+
+An asynchronous function in Swift can give up the thread that it’s running on, which lets another asynchronous function run on that thread while the first function is blocked. When an asynchronous function resumes, Swift doesn’t make any guarantee about which thread that function will run on.
+
+Parallelism is MPI, just multiple task continuing simultaneously.
+
+### Defining `async` function and calling `await`
+
+``` swift
+final class UserStore {
+    func fetchParticipants() async -> [Participant] {...}
+}
+```
+and to use an `async` function one must use `await` to call the function.
+
+The `await` keyword is used to mark possible (might) *suspension* the execution of an asynchronous function until the awaited asynchronous operation completes. It ensures that the subsequent code does not execute until the awaited operation finishes
+
+> This is also called *yielding the thread*. Swift suspend the current execution of the thread and run some other code on that thread instead.
+
+### Task
+
+To call an asynchronous task, one has to call it in an asynchronous context, meaning async func has to be inside async func.
+
+Many API calls are synchronous, to use such async function inside, it has to be enclose inside `Task` to create the async context.
+
 ## Actor Pattern (reference type)
 
-[Link to reference artical](https://www.avanderlee.com/swift/actors/)
+[Link to reference article](https://www.avanderlee.com/swift/actors/)
 
 `actor` can be used to create actor in swift which the compiler static checks and prevents actor state from data race.
+
+Essentially meaning actor can safely access mutable state while being asynchronous.
 
 Everything is an actor, that can send finite number of messages, that can spawn finite number of actor, that can designate their own behaviors.
 
@@ -126,6 +196,10 @@ actor ChickenFeeder {
 ```
 
 > Different to class, actor does not support inheritances, and tho is a reference type does not refer to the same data like class does.
+
+### `@MainActor` annotation
+
+Because UI update has to be handled by the main thread, and asynchronous function might execute on a background thread, `@MainActor` annotation ensure a class that all property mutation on said class is handled on the main thread only.
 
 ### `isolated` and `nonisolated` function
 
@@ -172,7 +246,7 @@ For voice over.
 
 ## `@State` and `@Binding` (only works for value type, e.g. structures and enumerations)
 
-`@State` defines source of truth, meaning this is where the data is from, all other view using this data will reference the source of truth to get the data. Good practics to add `private` so the data can only be mutated within the view.
+`@State` defines source of truth, meaning this is where the data is from, all other view using this data will reference the source of truth to get the data. Good practice to add `private` so the data can only be mutated within the view.
 `@Binding` defines a mutable value that pass down from parent function's variable with `@State` binding.
 
 Use a .constant binding to create an immutable value when using live\_preview
@@ -183,7 +257,7 @@ Remember to use `$` to pass `@State` source of truth to child function that take
 
 property wrappers that declare a reference type as a source of truth: `@ObservedObject`, `@StateObject`, and `@EnvironmentObject`.
 
-Within a class use `@Published` on var within an `@ObservableObject` will cost those var to trigger update to SwiftUI object observers when any published properties change.
+Within a class use `@Published` on var within an `@ObservableObject` will cost those var to trigger update to SwiftUI object observers before published properties change.
 
 `@StateObject` can be used to create an observable object.
 
@@ -212,6 +286,14 @@ Scene + View => Window
 Scene can be active to/from inactive, or from inactive to/from background
 
 Current state of the scene can be read from environment value `scenePhase`. It good to have actions to perform while scene transitions to another phase (e.g. trigger app data save when scene phase becomes inactive).
+
+Inactive scene doesn't receive events and can free any unnecessary resources.
+
+``` swift
+@Environment(\.scenePhase) private var scenePhase  // Example
+```
+
+Observe this variable, one can save data when it is `==` inactive.
 
 ### Event and state
 
