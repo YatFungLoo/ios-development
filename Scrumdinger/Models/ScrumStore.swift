@@ -9,12 +9,16 @@ import SwiftUI
 
 @MainActor  // marked for async load function.
 class ScrumStore: ObservableObject {
-    @Published var scrum: [DailyScrum] = []  // Any view observing this property will re-render again when this value changes.
-
-    // Save data to user's Documents folder.
+    // Any view observing this property will re-render again when this value changes.
+    @Published var scrums: [DailyScrum] = []
+    /*
+     Save data to user's Documents folder. Create has to be true for .documentationDirectory.
+     .documentDirectory {Device_Folder}/Documents.
+     .documentationDirectory {Device_Folder}/Library/Documentation/ which doesnt exist at app launch.
+     */
     private static func fileURL() throws -> URL {
         try FileManager.default.url(
-            for: .documentationDirectory, in: .userDomainMask,
+            for: .documentDirectory, in: .userDomainMask,
             appropriateFor: nil, create: false
         )
         .appendingPathComponent("scrums.data")
@@ -34,15 +38,15 @@ class ScrumStore: ObservableObject {
             return dailyScrums  // return the decoded data.
         }
         let scrums = try await task.value
-        self.scrum = scrums
+        self.scrums = scrums
     }
 
-    func save(scrum: [DailyScrum]) async throws {
+    func save(scrums: [DailyScrum]) async throws {
         let task = Task {
-            let data = try JSONEncoder().encode(scrum)
+            let data = try JSONEncoder().encode(scrums)
             let outfile = try Self.fileURL()
             try data.write(to: outfile)
         }
-        _ = try await task.value // _ meaning return value is discarded.
+        _ = try await task.value  // _ meaning return value is discarded.
     }
 }
