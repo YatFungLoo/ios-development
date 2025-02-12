@@ -11,6 +11,7 @@ import SwiftUI
 struct ScrumdingerApp: App {
     // StateObject creates a single observable object for each instance of the structe that declares it.
     @StateObject private var store = ScrumStore()
+    @State private var errorWrapper: ErrorWrapper?  // Default value of an optional is nil. (Note: use ":")
 
     var body: some Scene {
         WindowGroup {
@@ -19,7 +20,8 @@ struct ScrumdingerApp: App {
                     do {
                         try await store.save(scrums: store.scrums)
                     } catch {
-                        fatalError(error.localizedDescription)
+                        errorWrapper = ErrorWrapper(
+                            error: error, guidance: "Try again later.")
                     }
                 }
             }
@@ -27,8 +29,16 @@ struct ScrumdingerApp: App {
                 do {
                     try await store.load()
                 } catch {
-                    fatalError(error.localizedDescription)
+                    errorWrapper = ErrorWrapper(
+                        error: error,
+                        guidance:
+                            "Scrumdinger will load sample data and continue.")
                 }
+            }
+            .sheet(item: $errorWrapper) {
+                store.scrums = DailyScrum.sampleData
+            } content: { wrapper in
+                ErrorView(errorWrapper: wrapper)
             }
         }
     }
