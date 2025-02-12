@@ -36,6 +36,9 @@ Just following the tutorial to gain some experience working with Swift and Swift
     - [Scene](#scene)
     - [Event and state](#event-and-state)
     - [View life cycle event](#view-life-cycle-event)
+  - [Availability feature: `#/@available`](#availability-feature-available)
+  - [Error](#error)
+  - [App sandbox and `xcrun` command](#app-sandbox-and-xcrun-command)
 
 <!-- markdown-toc end -->
 
@@ -117,6 +120,8 @@ A way to make `var` getable from public but not setable from public (only setabl
 
 Object in Swift are of reference type (all instance of a class shares the same copy of data), where ARC (automatic reference counting) handles new and delete. Assign `nil` to deallocate, which will call `deinit(){}`.
 
+> Default value of an optional is nil.
+
 Strong reference does not allow deallocation by ARC. ARC will always be $>=1$.
 
 Weak reference inversely allow deallocation by ARC. ARC will never be i $>1$.
@@ -130,6 +135,8 @@ weak var colleague: Employee? // This is a weal reference.
 ```
 
 Class type must be of optional in order to assign `nil`.
+
+> Remember to use `:` and not `=`.
 
 ``` swift
 sabby?.colleague = cathy // Use ?
@@ -166,6 +173,7 @@ final class UserStore {
     func fetchParticipants() async -> [Participant] {...}
 }
 ```
+
 and to use an `async` function one must use `await` to call the function.
 
 The `await` keyword is used to mark possible (might) *suspension* the execution of an asynchronous function until the awaited asynchronous operation completes. It ensures that the subsequent code does not execute until the awaited operation finishes
@@ -306,3 +314,56 @@ SwiftUI follows declarative programming patterns, *view* render *UI* event *code
 `onDisappear(perform:)` trigger actions when view disappears.
 
 `task(priority:_:)` trigger actions that execute asynchronously before the view appears on screen.
+
+## Availability feature: `#/@available`
+
+The Swift availability features enable you to maintain a single code base for an app that runs in multiple versions of iOS.
+
+With each version of ios updates, the API framework versions follows. Using the `#available` or `@available` attribute can specific a section of code to only run by a specific version of ios, since the device.
+
+``` swift
+if #available(iOS 16.0, *) {  // Use # for section of code.
+  // Code for device running IOS 16.
+} else { 
+  // Code for other IOS version
+}
+```
+
+``` swift
+@available(iOS 16.0, *)
+struct SampleStruct: Struct {
+  // Only usable for IOS 16 or later. Without availability check.
+}
+```
+
+## Error
+
+> Use `enum` to conforms to `Error` type because enumerations represents a finite number of values.
+
+```swift
+enum SampleError: Error { case errorRequired }
+```
+
+```swift
+var error: MachineError
+
+var body: some View {
+    Text(error.localizedDescription)  // LD returns error as string.
+}
+```
+
+## App sandbox and `xcrun` command
+
+App sandbox is an ios container that let simulator have limited system resources and data to a contained part of the the developing system.
+
+`xcrun` can be used to control simulator, specific the `xcrun simctl` command.
+
+```swift
+xcrun simctl get_app_container booted Bundle.Identifier data  // Return app data path.
+```
+
+```swift
+xcrun simctl list  // Return all available UDID.
+```
+
+Loads more commands that can be used that are not mentioned here.
