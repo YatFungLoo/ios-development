@@ -36,7 +36,7 @@ Just following the tutorial to gain some experience working with Swift and Swift
   - [NavigationStack](#navigationstack)
   - [.accessibilityelement and label](#accessibilityelement-and-label)
   - [`@State` and `@Binding` (only works for value type, e.g. structures and enumerations)](#state-and-binding-only-works-for-value-type-eg-structures-and-enumerations)
-  - [Reference Type (object)](#reference-type-object)
+  - [Reference Type `@object`](#reference-type-object)
   - [Form and TextField](#form-and-textfield)
   - [Modality](#modality)
     - [modal sheet (page is partially covers the underlying content)](#modal-sheet-page-is-partially-covers-the-underlying-content)
@@ -362,13 +362,13 @@ Use a .constant binding to create an immutable value when using live\_preview
 
 Remember to use `$` to pass `@State` source of truth to child function that takes `@Binding` in order for the child function to change alter its value.
 
-## Reference Type (object)
+## Reference Type `@object`
 
 property wrappers that declare a reference type as a source of truth: `@ObservedObject`, `@StateObject`, and `@EnvironmentObject`.
 
 Within a class use `@Published` on var within an `@ObservableObject` will cost those var to trigger update to SwiftUI object observers before published properties change.
 
-`@StateObject` can be used to create an observable object.
+`@StateObject` can be used to create an observable object and use it through out its lifetime. A good practice for managing memory resources instead of creating and destroying the instance every time there is a view update.
 
 `@ObservedObject` indicates a view received an object from a parent source. Does not need an initial value because it is an received object.
 
