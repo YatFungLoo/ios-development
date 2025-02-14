@@ -8,12 +8,20 @@ Just following the tutorial to gain some experience working with Swift and Swift
 **Table of Contents**
 
 - [Scrumdinger App (Learning Swift)](#scrumdinger-app-learning-swift)
+  - [Struct vs Enum vs Class](#struct-vs-enum-vs-class)
   - [Closure](#closure)
     - [Completion Closure using `escaping` and `nonescaping`](#completion-closure-using-escaping-and-nonescaping)
+    - [`$0` `$1` access numbered argument](#0-1-access-numbered-argument)
   - [`some` keyword](#some-keyword)
   - [`throw` keyword](#throw-keyword)
   - [Private(set)](#privateset)
+  - [Optional](#optional)
+    - [Optional Binding](#optional-binding)
+    - [Optional Chaining](#optional-chaining)
+    - [Using the Nil-Coalescing Operator](#using-the-nil-coalescing-operator)
+    - [Unconditional Unwrapping](#unconditional-unwrapping)
   - [Strong `?` and `weak` reference](#strong--and-weak-reference)
+  - [where](#where)
   - [Asynchronous](#asynchronous)
     - [Asynchronous vs Parallelism](#asynchronous-vs-parallelism)
     - [Defining `async` function and calling `await`](#defining-async-function-and-calling-await)
@@ -41,6 +49,12 @@ Just following the tutorial to gain some experience working with Swift and Swift
   - [App sandbox and `xcrun` command](#app-sandbox-and-xcrun-command)
 
 <!-- markdown-toc end -->
+
+## Struct vs Enum vs Class
+
+Need to study further to clarify which one are value and reference type.
+
+Enum are $sum$, struct are $product$. Where the former can only be as one type at a given time, while the latter can be multiple types.
 
 ## Closure
 
@@ -102,6 +116,12 @@ The main difference between completion handlers and async await is that completi
 
 Meanwhile, asynchronous functions are written sequentially.
 
+### `$0` `$1` access numbered argument
+
+[Very good answer](https://developer.apple.com/forums/thread/124678?answerId=389639022#389639022)
+
+`$` allow closure to access the argument number passed (i.e. `$0` is shortcut to access the first argument).
+
 ## `some` keyword
 
 swift provides a function called `protocol` for generics and type erasure, which is used to indicate that a function or property will return a value of a specific type that conforms to a protocol, but the exact type is not specified.
@@ -115,6 +135,57 @@ Throwing function mark with the keyword `throw` are for error handling. If a fun
 ## Private(set)
 
 A way to make `var` getable from public but not setable from public (only setable from private).
+
+## Optional
+
+Optionals is a swift type, it is either a wrapped value or the absence of a date.
+
+```swift
+let shortForm: Int? = Int("42")  // Same thing as below.
+let longForm: Optional<Int> = Int("42")
+```
+
+### Optional Binding
+
+Using either `if let`, `guard let`, `switch`, binding the optional variable to access it.
+
+```swift
+if let i = shortForm {
+  print ("\(i)")
+} else {
+  print("No value")
+}
+// This if-else statement prints 1.
+```
+
+### Optional Chaining
+
+Access using postfix optional chaining operator (postfix ?).
+
+```swift
+if let shortFrom = optional as? Int { print("true") }
+```
+
+### Using the Nil-Coalescing Operator
+
+Default value can be supplied via `??` operator. You can also chain `??` to multiple optionals.
+
+```swift
+let defaultImagePath = "/images/default.png"
+let heartPath = imagePaths["heart"] ?? defaultImagePath
+print(heartPath)
+// Prints "/images/default.png"
+```
+
+### Unconditional Unwrapping
+
+If a optional is certain to be a value and not null. Postfix `!` can be used to force unwrap the value.
+
+```swift
+let isPNG = imagePaths["star"]!.hasSuffix(".png")
+print(isPNG)
+// Prints "true"
+```
 
 ## Strong `?` and `weak` reference
 
@@ -143,6 +214,36 @@ sabby?.colleague = cathy // Use ?
 ```
 
 > By default property are strong type.
+
+## where
+
+`where` can be used as a keyword to filter. They can be used in a for loop, protocol extensions, first, contains, and initialisers.
+
+```swift
+for i in nums where nums % 2 == 0 { /* prints only even. */ }
+```
+
+```swift
+extension Array where Element == Int { /* only do this to Array elements that are of type Int. */ }
+```
+
+`.first` gets the first element in an array, with `where` to add conditions.
+
+```swift
+let names = ["Henk", "John", "Jack"]
+let firstJname = names.first(where: { (name) -> Bool in
+    return name.first == "J"
+}) // Returns John
+```
+
+`.contains` with `where` use to condition matching an element of an array
+
+```swift
+let fruits = ["Banana", "Apple", "Kiwi"]
+let containsBanana = fruits.contains(where: { (fruit) in
+    return fruit == "Banana"
+}) // Returns true
+```
 
 ## Asynchronous
 
