@@ -9,6 +9,7 @@ Just following the tutorial to gain some experience working with Swift and Swift
 
 - [Scrumdinger App (Learning Swift)](#scrumdinger-app-learning-swift)
   - [Struct vs Enum vs Class](#struct-vs-enum-vs-class)
+  - [Properties](#properties)
   - [Closure](#closure)
     - [Completion Closure using `escaping` and `nonescaping`](#completion-closure-using-escaping-and-nonescaping)
     - [`$0` `$1` access numbered argument](#0-1-access-numbered-argument)
@@ -55,6 +56,22 @@ Just following the tutorial to gain some experience working with Swift and Swift
 Need to study further to clarify which one are value and reference type.
 
 Enum are $sum$, struct are $product$. Where the former can only be as one type at a given time, while the latter can be multiple types.
+
+## Properties
+
+[ref](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/#app-top)
+
+Properties are values that are associated to a class, structure, or enumeration. Think of it as the same as class variables in C++ class.
+
+There are three types of properties.
+
+1. Stored Properties: `let`/`var` as part of instance.
+2. Computed Properties: C++ style getter that computed via stored prop.
+3. Type Properties: Properties that are associated with the type itself (i.e. `static`).
+
+Stored properties can be lazy, where initial value isn’t calculated until the first time it’s used.
+
+There is also properties observers, property wrapper, and global/local.
 
 ## Closure
 
