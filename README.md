@@ -125,6 +125,33 @@ grabLunch(message:"Let's go out for lunch")  {
 
 There is also `@autoclosure` that can be use at parameter to automatically adds curly braces.
 
+> Turns out there can be multiple trailing closure! Where the first doesn't need a label, while the rest are required one.
+
+Following is an example where a view taking two closure, while the preview provider only naming the second (and last) closure.
+
+``` swift
+struct CollapsibleMinSecPicker<MinutesValue, SecondsValue, Label, Content>: View where MinutesValue: Hashable, SecondsValue: Hashable, Label: View, Content: View {
+    @Binding var minutes: MinutesValue
+    @Binding var seconds: SecondsValue
+    @ViewBuilder let label: () -> Label
+    @ViewBuilder let content: () -> Content
+    
+    var body: some View {
+		// ... some code ...
+    }
+}
+
+struct CollapsibleMinSecPicker_PreviewProvider: PreviewProvider {
+    static var previews: some View {
+        CollapsibleMinSecPicker(minutes: .constant(1), seconds: .constant(1)) {  // this is already the label closure.
+            Text("Duration")
+        } content: {  // notice where only content needs a label.
+            Text("Picker Content")
+        }
+    }
+}
+```
+
 ### Completion Closure using `escaping` and `nonescaping`
 
 Completion handlers allows closure to escape and return to the function, essentially how async is done without syntactic sugar on top.
